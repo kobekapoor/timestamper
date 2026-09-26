@@ -1,8 +1,86 @@
-/*
+/* Timestamper: right-side time markers for read-aloud pacing. */
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+body {
+	--timestamper-ribbon-width: 5em;
+	--timestamper-gap: var(--size-4-3);
+}
 
-If your plugin does not need CSS, delete this file.
+.timestamper-line,
+.timestamper-block {
+	position: relative;
+}
 
-*/
+.timestamper-line::after {
+	content: attr(data-timestamper);
+}
+
+.timestamper-line::after,
+.timestamper-badge {
+	position: absolute;
+	top: 0;
+	left: 100%;
+	margin-left: var(--timestamper-gap);
+	font-family: var(--timestamper-font, var(--font-monospace));
+	font-size: var(--font-ui-smaller);
+	line-height: var(--line-height-normal);
+	font-weight: var(--font-semibold);
+	white-space: nowrap;
+	/* List lines use a negative text-indent for hanging bullets; don't inherit it. */
+	text-indent: 0;
+	pointer-events: none;
+	user-select: none;
+}
+
+/* ---------- Badge style ---------- */
+
+.timestamper-style-badge .timestamper-line::after,
+.timestamper-style-badge .timestamper-badge {
+	padding: 0 var(--size-4-2);
+	border-radius: var(--radius-s);
+	background-color: var(--timestamper-bg, var(--background-modifier-hover));
+	color: var(--timestamper-text, var(--text-accent));
+}
+
+/* Inline placement: keep the badge inside the text column and reserve room for it. */
+.timestamper-inline .timestamper-line,
+.timestamper-inline .timestamper-block {
+	padding-right: 6em;
+}
+
+.timestamper-inline .timestamper-line::after,
+.timestamper-inline .timestamper-badge {
+	left: auto;
+	right: 0;
+	margin-left: 0;
+}
+
+/* ---------- Ribbon style ---------- */
+
+/* The strip itself, spanning the full height of the note's content. */
+.timestamper-style-ribbon .timestamper-has-markers .cm-contentContainer,
+.timestamper-style-ribbon .timestamper-has-markers .markdown-preview-sizer {
+	position: relative;
+}
+
+.timestamper-style-ribbon .timestamper-has-markers .cm-contentContainer::after,
+.timestamper-style-ribbon .timestamper-has-markers .markdown-preview-sizer::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 100%;
+	width: var(--timestamper-ribbon-width);
+	margin-left: var(--timestamper-gap);
+	border-radius: var(--radius-s);
+	background-color: var(--timestamper-bg, var(--background-secondary));
+	pointer-events: none;
+}
+
+/* Times sit centred on the strip, above it in the stacking order. */
+.timestamper-style-ribbon .timestamper-line::after,
+.timestamper-style-ribbon .timestamper-badge {
+	width: var(--timestamper-ribbon-width);
+	text-align: center;
+	z-index: 1;
+	color: var(--timestamper-text, var(--text-accent));
+}
