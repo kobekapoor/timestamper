@@ -81,7 +81,7 @@ export class TimestamperSettingTab extends PluginSettingTab {
 			new Setting(containerEl)
 				.setName('Badge placement')
 				.setDesc(
-					'Right margin works best with readable line length turned on. Use right edge of text if badges get cut off. Phones and tablets always use right edge of text.',
+					'Right margin works best with readable line length turned on. Badges move to the right edge of the text when the margin is too narrow.',
 				)
 				.addDropdown((dropdown) =>
 					dropdown

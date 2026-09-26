@@ -44,16 +44,16 @@ body {
 /* Inline placement: keep the badge inside the text column and reserve room for it. */
 .timestamper-inline .timestamper-line,
 .timestamper-inline .timestamper-block,
-.is-mobile.timestamper-style-badge .timestamper-line,
-.is-mobile.timestamper-style-badge .timestamper-block {
+.timestamper-style-badge .timestamper-no-room .timestamper-line,
+.timestamper-style-badge .timestamper-no-room .timestamper-block {
 	padding-right: 6em;
 }
 
-/* Mobile has no margin to spare, so badges always sit inside the text column there. */
+/* Badges also move inside the text column when the note's margin is too narrow. */
 .timestamper-inline .timestamper-line::after,
 .timestamper-inline .timestamper-badge,
-.is-mobile.timestamper-style-badge .timestamper-line::after,
-.is-mobile.timestamper-style-badge .timestamper-badge {
+.timestamper-style-badge .timestamper-no-room .timestamper-line::after,
+.timestamper-style-badge .timestamper-no-room .timestamper-badge {
 	left: auto;
 	right: 0;
 	margin-left: 0;
@@ -90,15 +90,15 @@ body {
 	color: var(--timestamper-text, var(--text-accent));
 }
 
-/* On mobile, reserve room for the ribbon inside the note instead of the margin.
+/* When the margin is too narrow, reserve room for the ribbon inside the note instead.
    Lines end where the padding starts, so the times still land on the strip. */
-.is-mobile.timestamper-style-ribbon:not(.timestamper-hidden) .timestamper-has-markers .cm-content,
-.is-mobile.timestamper-style-ribbon:not(.timestamper-hidden) .timestamper-has-markers .markdown-preview-sizer {
+.timestamper-style-ribbon:not(.timestamper-hidden) .timestamper-has-markers.timestamper-no-room .cm-content,
+.timestamper-style-ribbon:not(.timestamper-hidden) .timestamper-has-markers.timestamper-no-room .markdown-preview-sizer {
 	padding-right: calc(var(--timestamper-ribbon-width) + var(--timestamper-gap)) !important;
 }
 
-.is-mobile.timestamper-style-ribbon .timestamper-has-markers .cm-contentContainer::after,
-.is-mobile.timestamper-style-ribbon .timestamper-has-markers .markdown-preview-sizer::after {
+.timestamper-style-ribbon .timestamper-has-markers.timestamper-no-room .cm-contentContainer::after,
+.timestamper-style-ribbon .timestamper-has-markers.timestamper-no-room .markdown-preview-sizer::after {
 	left: auto;
 	right: 0;
 	margin-left: 0;

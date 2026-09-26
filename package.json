@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-timestamper",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Right-side timestamp markers for read-aloud pacing in Obsidian",
 	"main": "main.js",
 	"type": "module",

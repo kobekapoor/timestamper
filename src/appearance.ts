@@ -1,4 +1,5 @@
 import { debounce, MarkdownView, Plugin } from 'obsidian';
+import { MarginRoom } from './margin-room';
 import { findMarkers } from './markers';
 import type { MarkerFont, TimestamperSettings } from './settings';
 
@@ -23,6 +24,7 @@ const PRESET_FONTS: Record<Exclude<MarkerFont, 'custom'>, string> = {
  */
 export class Appearance {
 	private readonly refreshViewsDebounced = debounce(() => this.refreshViews(), 300, true);
+	private readonly marginRoom = new MarginRoom(() => this.markdownViews());
 
 	constructor(
 		private plugin: Plugin,
@@ -37,11 +39,13 @@ export class Appearance {
 		this.plugin.registerEvent(
 			this.plugin.app.vault.on('modify', this.refreshViewsDebounced),
 		);
+		this.marginRoom.load();
 		workspace.onLayoutReady(() => this.refreshViews());
 		this.apply();
 	}
 
 	unload() {
+		this.marginRoom.unload();
 		document.body.removeClasses(BODY_CLASSES);
 		for (const name of CSS_VARS) document.body.style.removeProperty(name);
 		for (const view of this.markdownViews()) view.containerEl.removeClass(HAS_MARKERS_CLASS);
@@ -78,6 +82,7 @@ export class Appearance {
 				findMarkers(view.getViewData()).length > 0,
 			);
 		}
+		this.marginRoom.refresh();
 	}
 
 	private markdownViews(): MarkdownView[] {
