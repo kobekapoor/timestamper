@@ -6,6 +6,7 @@ const BODY_CLASSES = [
 	'timestamper-inline',
 	'timestamper-style-badge',
 	'timestamper-style-ribbon',
+	'timestamper-hidden',
 ];
 const HAS_MARKERS_CLASS = 'timestamper-has-markers';
 const CSS_VARS = ['--timestamper-bg', '--timestamper-text', '--timestamper-font'];
@@ -50,6 +51,7 @@ export class Appearance {
 	apply() {
 		const s = this.getSettings();
 		const body = document.body;
+		body.toggleClass('timestamper-hidden', !s.showMarkers);
 		body.toggleClass('timestamper-style-badge', s.style === 'badge');
 		body.toggleClass('timestamper-style-ribbon', s.style === 'ribbon');
 		// The ribbon always lives in the margin so it never overlaps text.

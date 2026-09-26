@@ -12,6 +12,8 @@ export interface MarkerColors {
 }
 
 export interface TimestamperSettings {
+	/** Show the times at all. Markers stay in the note either way. */
+	showMarkers: boolean;
 	/** `badge` shows a pill per marker; `ribbon` shows a strip down the whole note. */
 	style: MarkerStyle;
 	/** Badge only. `margin` sits outside the text column; `inline` at the right edge of the text. */
@@ -27,6 +29,7 @@ export interface TimestamperSettings {
 }
 
 export const DEFAULT_SETTINGS: TimestamperSettings = {
+	showMarkers: true,
 	style: 'badge',
 	placement: 'margin',
 	badgeColors: { background: '', text: '' },
@@ -50,6 +53,16 @@ export class TimestamperSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
+			.setName('Show timestamps')
+			.setDesc('Turn off to hide all times without removing the markers. Also available as a command.')
+			.addToggle((toggle) =>
+				toggle.setValue(settings.showMarkers).onChange(async (value) => {
+					settings.showMarkers = value;
+					await this.plugin.saveSettings();
+				}),
+			);
+
+		new Setting(containerEl)
 			.setName('Marker style')
 			.setDesc('Badges show a small label next to each marker. A ribbon runs down the whole note.')
 			.addDropdown((dropdown) =>
@@ -68,7 +81,7 @@ export class TimestamperSettingTab extends PluginSettingTab {
 			new Setting(containerEl)
 				.setName('Badge placement')
 				.setDesc(
-					'Right margin works best with readable line length turned on. Use right edge of text if badges get cut off.',
+					'Right margin works best with readable line length turned on. Use right edge of text if badges get cut off. Phones and tablets always use right edge of text.',
 				)
 				.addDropdown((dropdown) =>
 					dropdown

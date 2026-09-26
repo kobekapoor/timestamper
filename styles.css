@@ -43,12 +43,17 @@ body {
 
 /* Inline placement: keep the badge inside the text column and reserve room for it. */
 .timestamper-inline .timestamper-line,
-.timestamper-inline .timestamper-block {
+.timestamper-inline .timestamper-block,
+.is-mobile.timestamper-style-badge .timestamper-line,
+.is-mobile.timestamper-style-badge .timestamper-block {
 	padding-right: 6em;
 }
 
+/* Mobile has no margin to spare, so badges always sit inside the text column there. */
 .timestamper-inline .timestamper-line::after,
-.timestamper-inline .timestamper-badge {
+.timestamper-inline .timestamper-badge,
+.is-mobile.timestamper-style-badge .timestamper-line::after,
+.is-mobile.timestamper-style-badge .timestamper-badge {
 	left: auto;
 	right: 0;
 	margin-left: 0;
@@ -83,4 +88,32 @@ body {
 	text-align: center;
 	z-index: 1;
 	color: var(--timestamper-text, var(--text-accent));
+}
+
+/* On mobile, reserve room for the ribbon inside the note instead of the margin.
+   Lines end where the padding starts, so the times still land on the strip. */
+.is-mobile.timestamper-style-ribbon:not(.timestamper-hidden) .timestamper-has-markers .cm-content,
+.is-mobile.timestamper-style-ribbon:not(.timestamper-hidden) .timestamper-has-markers .markdown-preview-sizer {
+	padding-right: calc(var(--timestamper-ribbon-width) + var(--timestamper-gap)) !important;
+}
+
+.is-mobile.timestamper-style-ribbon .timestamper-has-markers .cm-contentContainer::after,
+.is-mobile.timestamper-style-ribbon .timestamper-has-markers .markdown-preview-sizer::after {
+	left: auto;
+	right: 0;
+	margin-left: 0;
+}
+
+/* ---------- Hidden ---------- */
+
+body.timestamper-hidden .timestamper-line::after,
+body.timestamper-hidden .timestamper-badge,
+body.timestamper-hidden .timestamper-has-markers .cm-contentContainer::after,
+body.timestamper-hidden .timestamper-has-markers .markdown-preview-sizer::after {
+	display: none;
+}
+
+body.timestamper-hidden .timestamper-line,
+body.timestamper-hidden .timestamper-block {
+	padding-right: 0;
 }

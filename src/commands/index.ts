@@ -1,15 +1,32 @@
-import { Editor, Plugin } from 'obsidian';
+import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
+import type TimestamperPlugin from '../main';
 import { findMarkers, formatMarker } from '../markers';
 import { InsertMarkerModal } from '../ui/insert-marker-modal';
 
-export function registerCommands(plugin: Plugin) {
+export function registerCommands(plugin: TimestamperPlugin) {
 	plugin.addCommand({
 		id: 'insert-timestamp-marker',
 		name: 'Insert timestamp marker',
-		editorCallback: (editor) => {
-			new InsertMarkerModal(plugin.app, previousMarker(editor) ?? '', (label) =>
-				insertMarker(editor, label),
-			).open();
+		icon: 'clock',
+		editorCallback: (editor) => openInsertModal(plugin, editor),
+	});
+
+	plugin.addRibbonIcon('clock', 'Insert timestamp marker', () => {
+		const view = plugin.app.workspace.getActiveViewOfType(MarkdownView);
+		if (!view) {
+			new Notice('Open a note to insert a timestamp marker.');
+			return;
+		}
+		openInsertModal(plugin, view.editor);
+	});
+
+	plugin.addCommand({
+		id: 'toggle-timestamp-visibility',
+		name: 'Show or hide timestamps',
+		icon: 'eye',
+		callback: async () => {
+			plugin.settings.showMarkers = !plugin.settings.showMarkers;
+			await plugin.saveSettings();
 		},
 	});
 
@@ -28,6 +45,12 @@ export function registerCommands(plugin: Plugin) {
 			editor.transaction({ changes });
 		},
 	});
+}
+
+function openInsertModal(plugin: Plugin, editor: Editor) {
+	new InsertMarkerModal(plugin.app, previousMarker(editor) ?? '', (label) =>
+		insertMarker(editor, label),
+	).open();
 }
 
 /** Appends a marker to the end of the cursor's line, replacing any marker already there. */
